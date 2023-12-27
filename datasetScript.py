@@ -1,27 +1,28 @@
 import csv
 import re
 
-def extract_actions_and_stats(input_file, output_csv):
+def extract_lines(input_file, output_csv):
     with open(input_file, 'r', encoding='utf-8') as file:
-        transcript = file.read()
+        transcript = file.readlines()
 
-    # Define a regular expression to capture player actions and associated stats
-    pattern = r'Brennan:([ a-zA-Z,.\d])+[rR]oll([ a-zA-Z,.\d])+\n'
+    # Define a regular expression to capture Brennan's lines with the word "roll"
+    pattern = r'^Brennan:.*\broll\b.*$'
 
-    matches = re.findall(pattern, transcript)
-    print(matches)
+    brennan_lines_with_roll = [line.strip() for line in transcript if re.search(pattern, line, re.IGNORECASE)]
 
     # Write the data to a CSV file
     with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames="matches")
-            
-        for i in matches:
-            print(i)
-            #writer.writerow(i)
+        fieldnames = ['line']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for line in brennan_lines_with_roll:
+            writer.writerow({'line': line})
 
 if __name__ == "__main__":
     input_file = "shortTestScript.txt"
-    output_csv = "output_actions_and_stats.csv"
-    
-    extract_actions_and_stats(input_file, output_csv)
+    output_csv = "lines_with_roll.csv"
+
+    extract_lines(input_file, output_csv)
+
 

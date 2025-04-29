@@ -1,0 +1,6 @@
+get \ccess to llm
+test prompting it
+see how exemplars work
+see what i need to tune an llm
+come up with exemplars 
+
